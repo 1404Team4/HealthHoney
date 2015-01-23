@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 게시판 설정용 파일. sql을 여기서 작성함. 각 타입을 컨피그에서 alias 설정하면 짧게 설정 됨. -->
+<mapper namespace="freeboard">      <!-- namespace 는 중복 안됨 -->
+	<select id="getTotSize" resultType="int" parameterType="BoardDto">
+		select
+		count(no) from freeboard
+	</select>
+
+	<select id="getList" resultType="BoardDto" parameterType="BoardDto">
+		select
+		* from freeboard order by ref desc, step asc
+	</select>
+
+	<select id="curVal" resultType="int">
+		select max(no)+1 from
+		freeboard
+	</select>
+
+	<insert id="create" parameterType="BoardDto">
+		insert into	freeboard(title,content,writer,wdate,step,depth,rcount,ref) values(#{title},#{content},#{writer},now(),0,0,0,#{ref})
+	</insert>
+
+	<select id="read" resultType="BoardDto" parameterType="int">
+		select *
+		from freeboard where no=#{value}
+	</select>
+
+	<update id="addRcount" parameterType="int">
+		update freeboard set rcount
+		=
+		rcount + 1 where no = #{value}
+	</update>
+
+	<update id="update" parameterType="BoardDto">
+		update freeboard set
+		title =
+		#{title}
+		,content = #{content}
+		where no = #{no}
+	</update>
+
+	<update id="addStep" parameterType="BoardDto">
+		update freeboard set step = step + 1
+		where ref = #{ref} and step &gt;
+		#{step}
+		<!-- 이렇게 넣을수도 있다. <![CDATA[ update freeboard set step = step + 1 where 
+			ref=#{ref} and step > #{step} ]]> --> 
+	</update>
+
+	<insert id="reply" parameterType="BoardDto">
+		insert into
+		freeboard(title,content,writer,step,depth,ref,wdate, rcount)
+		values(#{title},
+		#{content}, #{writer}
+		,#{step}+1,#{depth}+1,#{ref},now(), 0)
+	</insert>
+
+</mapper>

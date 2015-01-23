@@ -1,0 +1,4 @@
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://58.143.203.188:3306/honey
+username=honey
+password=0000

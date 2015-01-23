@@ -1,0 +1,71 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+	<display-name>Archetype Created Web Application</display-name>
+	
+	<filter>
+      <filter-name>Encoding</filter-name>
+      <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+      <init-param>
+         <param-name>encoding</param-name>
+         <param-value>utf-8</param-value>
+      </init-param>
+   </filter>
+   <filter-mapping>
+      <filter-name>Encoding</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+   
+	<servlet>
+		<servlet-name>main</servlet-name>
+		<servlet-class>control.FrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>main</servlet-name>
+		<url-pattern>/main</url-pattern>
+	</servlet-mapping>
+
+	<!-- ajax 테스트 -->
+	<servlet>
+		<servlet-name>test</servlet-name>
+		<servlet-class>util.Test</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>test</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
+	   <servlet>
+      <servlet-name>honey</servlet-name>
+      <servlet-class>org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <init-param><!-- 스프링설정 파일 경로 수정 -->
+         <param-name>contextConfigLocation</param-name>
+         <param-value>
+            /WEB-INF/conf/honey_config.xml
+         </param-value>
+      </init-param>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>honey</servlet-name>
+      <url-pattern>*.do</url-pattern>
+   </servlet-mapping>
+   <servlet>
+      <servlet-name>board</servlet-name>
+      <servlet-class>org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <init-param><!-- 스프링설정 파일 경로 수정 -->
+         <param-name>contextConfigLocation</param-name>
+         <param-value>
+            /WEB-INF/conf/board_config.xml
+         </param-value>
+      </init-param>
+
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>board</servlet-name>
+      <url-pattern>*.board</url-pattern>
+   </servlet-mapping>
+</web-app>
