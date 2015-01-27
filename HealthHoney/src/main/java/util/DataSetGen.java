@@ -10,7 +10,7 @@ public class DataSetGen {
 		DataSetGen dsg = new DataSetGen();
 		
 		// startTime 현재일로부터 1일전 자정, endTime 현재일로부터 0일전
-		String dataSetId = dsg.getDataSetId(1, 0); 
+		String dataSetId = dsg.getDataSetId(3, 2); 
 		System.out.println(dataSetId);
 	}
 	

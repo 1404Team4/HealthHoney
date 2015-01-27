@@ -326,59 +326,69 @@
                  'datasetId' : dataSetId
              });
               request.execute(function(fitSegment){
-                 //console.log("fitSegment", fitSegment)
-
-                 var fitSegArr = fitSegment['point'];
-                 if(fitSegArr!=null){
-	                 for(var j=0;j<fitSegArr.length;j++){
-	                	 if(fitSegArr[j]['value'][0]['intVal']==7){
-	                		 walkingSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
-	                	 }
-	                	 else if(fitSegArr[j]['value'][0]['intVal']==8){
-	                		 runningSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
-	                	 }
-	                	 else if(fitSegArr[j]['value'][0]['intVal']==1){
-	                		 bikingSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
-	                	 }
-	                 }	
-                 }
-                 //console.log("walkingSegment", walkingSegment)
-                 var walk = walkingSegment
-                 var run = runningSegment
-                 var bike = bikingSegment
-                 var walkPercent= Math.round((walkingSegment/100)*100);  
-                 var runPercent=Math.round((runningSegment/100)*100);  
-                 var bikePercent=Math.round((bikingSegment/100)*100);  
-                 var sum=walkPercent+runPercent+bikePercent;
-                 console.log("walk : "+walkPercent+" / "+"run : "+runPercent+" / "+"bike : "+bikePercent+" / "+"sum : "+sum)
-                 $("#sessions").html(sum+' Min');
-                 var chart = $('#dashChart2').highcharts();
-                 if(sum>100){
-                	 chart.series[0].setData([
-                	             ['목표 달성',   walkPercent]
-                	             ]);
-                	 
-                 }
-                 else{
-	                 chart.series[0].setData([
-	                             ['걸은 시간',   walkPercent],
-	                             ['뛴 시간',     runPercent],
-	                             ['라이딩 시간',  bikePercent],
-	                             ['목표량까지 남은 시간',   100-(sum)]
-	                             ]);  
-                 }
-                 
-				//Calorie 차트 
-                 var walkingCal = walk*3;
-                 var runningCal = run*11.2;
-                 var bikingCal = bike*7.42;
-                 $("#totalCal").html((walkingCal+runningCal+bikingCal)+' Kcal');
-                 var chart2 = $('#calorie').highcharts();
-                 chart2.series[0].setData([
-                             ['걷기 소비',   walkingCal],
-                             ['달리기 소비',     runningCal],
-                             ['자전거 소비',  bikingCal],
-                             ]);
+	              var chart = $('#dashChart2').highcharts();
+            	  if(fitSegment['error']){
+            		  chart.series[0].setData([
+          		        ['',   0],
+        		        ['',   0],
+            			['잠시 후에 다시 시도',   0],
+            			[fitSegment['message'],  100]
+            			]);
+            			$("#sessions").html(fitSegment['message'])
+            	  }
+            	  else{
+	                 //console.log("fitSegment", fitSegment)
+	                 var fitSegArr = fitSegment['point'];
+	                 if(fitSegArr!=null){
+		                 for(var j=0;j<fitSegArr.length;j++){
+		                	 if(fitSegArr[j]['value'][0]['intVal']==7){
+		                		 walkingSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
+		                	 }
+		                	 else if(fitSegArr[j]['value'][0]['intVal']==8){
+		                		 runningSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
+		                	 }
+		                	 else if(fitSegArr[j]['value'][0]['intVal']==1){
+		                		 bikingSegment += Math.round((fitSegArr[j]['endTimeNanos']/60000000000)-(fitSegArr[j]['startTimeNanos']/60000000000))
+		                	 }
+		                 }	
+	                 }
+	                 //console.log("walkingSegment", walkingSegment)
+	                 var walk = walkingSegment
+	                 var run = runningSegment
+	                 var bike = bikingSegment
+	                 var walkPercent= Math.round((walkingSegment/120)*100);  
+	                 var runPercent=Math.round((runningSegment/120)*100);  
+	                 var bikePercent=Math.round((bikingSegment/120)*100);  
+	                 var sum=walkPercent+runPercent+bikePercent;
+	                 console.log("walk : "+walkPercent+" / "+"run : "+runPercent+" / "+"bike : "+bikePercent+" / "+"sum : "+sum)
+	                 $("#sessions").html(sum+' Min');
+	                 if(sum>100){
+	                	 chart.series[0].setData([
+	                	             ['목표 달성',   walkPercent]
+	                	             ]);
+	                	 
+	                 }
+	                 else{
+		                 chart.series[0].setData([
+		                             ['걸은 시간',   walkPercent],
+		                             ['뛴 시간',     runPercent],
+		                             ['라이딩 시간',  bikePercent],
+		                             ['목표량까지 남은 시간',   120-(sum)]
+		                             ]);  
+	                 }
+	                 
+					//Calorie 차트 
+	                 var walkingCal = walk*3;
+	                 var runningCal = run*11.2;
+	                 var bikingCal = bike*7.42;
+	                 $("#totalCal").html((walkingCal+runningCal+bikingCal)+' Kcal');
+	                 var chart2 = $('#calorie').highcharts();
+	                 chart2.series[0].setData([
+	                             ['걷기 소비',   walkingCal],
+	                             ['달리기 소비',     runningCal],
+	                             ['자전거 소비',  bikingCal],
+	                             ]);
+            	  }
                })
          },  // fitSegment 끝
          
@@ -473,34 +483,54 @@
 	                'datasetId' : dataSetId
 	            });
 	        	request.execute(function(fitSteps){
-	                var fitStepsArr = fitSteps['point']
-	                if(fitStepsArr!=null){
-		                for(var j=0;j<fitStepsArr.length;j++){
-		        		//console.log("k : "+k+" / "+"j : "+j)
-		                	steps += fitStepsArr[j]['value'][0]['intVal'];
-		                } // j for문 끝
-	                } // if문 끝
-	                console.log("steps : "+steps);
-	                $("#estiSteps").html(steps+' Steps')
-	                
-			        var strPercent=(steps/10000)*100;  
-	                //console.log("strPercent : "+strPercent)
-	                if(strPercent>100){
-	                	var chart = $('#dashChart1').highcharts();
-	                	$("#dialog").html('목표량보다 '+(steps-10000)+'걸음 초과달성')
-				        chart.series[0].setData([
-	                    ['목표달성!!',  strPercent]
-	                    ]);  
-				        $("#dialog").dialog("open");
-	                }
-	                else {
-	                	var chart = $('#dashChart1').highcharts();
-				        chart.series[0].setData([
-	                    ['걸음 수',   strPercent],
-	                    ['목표 걸음 수까지',  100-strPercent]
-	                    ]);  
-	                }
-	                steps=0;
+		            var chart = $('#dashChart1').highcharts();
+	        		if(fitSteps['error']){
+	        			if(fitSteps['error']['code']==500){
+							$("#500dialog").html('잠시 후에 다시 시도해 주십시오.')
+	        				chart.series[0].setData([
+	        					['잠시 후에 다시 시도',   0],
+	        					[fitSteps['message'],  100]
+	        					]);
+	        				$("#500dialog").dialog("open");
+	        				$("#estiSteps").html('0 Steps')
+	        			} // 500 에러 처리
+	        			else{
+		        			chart.series[0].setData([
+			                    ['잠시 후에 다시 시도',   0],
+			                    [fitSteps['message'],  100]
+			                    ]);
+		        			$("#estiSteps").html(fitSteps['message'])
+	        			} // 일반적 에러처리
+	        		}
+	        		else{
+		                var fitStepsArr = fitSteps['point']
+		                if(fitStepsArr!=null){
+			                for(var j=0;j<fitStepsArr.length;j++){
+			        		//console.log("k : "+k+" / "+"j : "+j)
+			                	steps += fitStepsArr[j]['value'][0]['intVal'];
+			                } // j for문 끝
+		                } // if문 끝
+		                console.log("steps : "+steps);
+		                $("#estiSteps").html(steps+' Steps')
+		                
+				        var strPercent=(steps/10000)*100;  
+		                //console.log("strPercent : "+strPercent)
+		                if(strPercent>100){
+		                	$("#dialog").html('목표량보다 '+(steps-10000)+'걸음 초과달성')
+					        chart.series[0].setData([
+		                    ['목표달성!!',  strPercent]
+		                    ]);  
+					        $("#dialog").dialog("open");
+		                } 
+		                else {
+		                	//var chart = $('#dashChart1').highcharts();
+					        chart.series[0].setData([
+		                    ['걸음 수',   strPercent],
+		                    ['목표 걸음 수까지',  100-strPercent]
+		                    ]);  
+		                }
+		                steps=0;
+	        		}
 	        	});
          } //fitSteps 끝
       };
@@ -616,5 +646,19 @@
     	        duration: 1000
     	      }
     	    });
+    	    $( "#500dialog" ).dialog({
+    	      dialogClass: "",
+    	      autoOpen: false,
+    	      /* title: "목표 달성!!", */
+    	      show: {
+    	        effect: "",
+    	        duration: 1000
+    	      },
+    	      hide: {
+    	        effect: "",
+    	        duration: 1000
+    	      }
+    	    });
+    	    
     	  });
 </script>

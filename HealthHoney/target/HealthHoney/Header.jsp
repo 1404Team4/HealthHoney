@@ -63,7 +63,6 @@
 			                  </a>
 			                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 			                     <li><a href="<%=cp%>/free/list.board">자유게시판</a></li>
-			                     <li><a href="#">Dropdown link</a></li>
 			                  </ul>
 			               </div>
 			            </li>
@@ -74,7 +73,7 @@
 									data-callback="signinCallback"
 									data-clientid="977578058440-6te7kh3mtob53g4p7gq40lik9oc6g2b5.apps.googleusercontent.com"
     								data-redirecturi="postmessage"
-									data-cookiepolicy="http://keimc.mooo.com"
+									data-cookiepolicy="single_host_origin"
 									data-accesstype="offline"
 									data-scope="https://www.googleapis.com/auth/plus.login 
 												https://www.googleapis.com/auth/plus.me 

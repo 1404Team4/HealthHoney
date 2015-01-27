@@ -60,7 +60,8 @@
                <!-- 하루치 걸음 수 -->
                <div>
                <h2 id="estiSteps">0 Steps</h2>
-               <div id="dialog" title="목표 달성!!" style="background-color: #4f4f4f; height: 30px"></div>
+               <div id="dialog" title="목표 달성!!" style="height: 30px"></div>
+               <div id="500dialog" title="Google API Server Error" style="height: 30px"></div>
                <input type="button" id="prev" value="Prev"/>
                <input type="button" id="next" value="Next"/>
                </div>
